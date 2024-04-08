@@ -1,32 +1,12 @@
-import { Contact, columns } from "@/components/Columns";
-import { DataTable } from "@/components/DataTable";
+import { Contact, columns } from "@/components/Table/Columns";
+import { DataTable } from "@/components/Table/DataTable";
+import { Toaster } from "@/components/ui/toaster";
+import { getData } from "@/utils/contact";
+import { Metadata } from "next";
 
-import Image from "next/image";
-
-async function getData(): Promise<Contact[]> {
-  return [
-    {
-      id: "728ed52f",
-      name: "John Doe",
-      phone: "555-555-5555",
-    },
-    {
-      id: "e8b4e0e0",
-      name: "Jane Smith",
-      phone: "555-555-5555",
-    },
-    {
-      id: "b8f3e0e0",
-      name: "John Smith",
-      phone: "555-555-5555",
-    },
-    {
-      id: "a8f3e0e0",
-      name: "Jane Doe",
-      phone: "555-555-5555",
-    },
-  ];
-}
+export const metadata: Metadata = {
+  title: "Contacts",
+};
 
 export default async function Home() {
   const data = await getData();
@@ -36,6 +16,7 @@ export default async function Home() {
       <div className="max-w-2xl w-full">
         <DataTable columns={columns} data={data} />
       </div>
+      <Toaster />
     </main>
   );
 }

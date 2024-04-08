@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,12 +12,25 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "./ui/alert-dialog";
+} from "../ui/alert-dialog";
 import { ArrowUpDown } from "lucide-react";
-import { Checkbox } from "./ui/checkbox";
+import { Checkbox } from "../ui/checkbox";
+import { deleteContact } from "@/utils/contact";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+import { Label } from "@radix-ui/react-label";
+import { CardAddContact } from "../Create/FormAdd";
+import { CardEditContact } from "../Create/FormEdit";
 
 export type Contact = {
-  id: string;
+  ID?: string;
   name: string;
   phone: string;
 };
@@ -53,7 +66,7 @@ export const columns: ColumnDef<Contact>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Email
+          Name
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
@@ -70,7 +83,24 @@ export const columns: ColumnDef<Contact>[] = [
       const contact = row.original as Contact;
       return (
         <div className="flex justify-start gap-3">
-          <Button>Edit</Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button>Edit</Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Edit profile</DialogTitle>
+                <DialogDescription>
+                  Make changes to your profile here. Click save when you're
+                  done.
+                </DialogDescription>
+              </DialogHeader>
+              <CardEditContact contact={contact} />
+              <DialogFooter>
+                <Button variant="outline">Save</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button variant="destructive">Delete</Button>
@@ -86,7 +116,9 @@ export const columns: ColumnDef<Contact>[] = [
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction>Delete</AlertDialogAction>
+                <AlertDialogAction onClick={() => deleteContact(contact)}>
+                  Delete
+                </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>

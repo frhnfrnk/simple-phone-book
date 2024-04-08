@@ -20,9 +20,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { useState } from "react";
-import { Input } from "./ui/input";
+import { Input } from "../ui/input";
+import Link from "next/link";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -55,15 +56,21 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="w-full flex items-center py-4">
+      <div className="w-full flex items-center justify-between py-4 gap-4">
         <Input
           placeholder="Filter names..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)
           }
-          className="w-full"
+          className="flex-grow"
         />
+        <Button>
+          <Link href={"/create"}>
+            <span className="hidden sm:inline">Add Contact</span>
+            <span className="sm:hidden">+</span>
+          </Link>
+        </Button>
       </div>
       <div className="rounded-md border w-full">
         <Table>
