@@ -52,3 +52,8 @@ export async function editContact(contact: Contact) {
     });
   }
 }
+
+export async function getContactById(id: string): Promise<Contact> {
+  const { data } = await axios.get(`http://localhost:8080/contacts/${id}`);
+  return data;
+}

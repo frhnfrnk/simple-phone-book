@@ -15,7 +15,7 @@ import {
 } from "../ui/alert-dialog";
 import { ArrowUpDown } from "lucide-react";
 import { Checkbox } from "../ui/checkbox";
-import { deleteContact } from "@/utils/contact";
+import { deleteContact, editContact } from "@/utils/contact";
 import {
   Dialog,
   DialogContent,
@@ -26,8 +26,9 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { Label } from "@radix-ui/react-label";
-import { CardAddContact } from "../Create/FormAdd";
-import { CardEditContact } from "../Create/FormEdit";
+import Link from "next/link";
+import { useState } from "react";
+import { Input } from "../ui/input";
 
 export type Contact = {
   ID?: string;
@@ -71,6 +72,14 @@ export const columns: ColumnDef<Contact>[] = [
         </Button>
       );
     },
+    cell: ({ row }) => {
+      const contact = row.original as Contact;
+      return (
+        <Link className="hover:underline" href={`/contact/${contact.ID}`}>
+          {contact.name}
+        </Link>
+      );
+    },
   },
   {
     accessorKey: "phone",
@@ -81,9 +90,12 @@ export const columns: ColumnDef<Contact>[] = [
     header: "Actions",
     cell: ({ row }) => {
       const contact = row.original as Contact;
+      const [name, setName] = useState(contact.name);
+      const [phone, setPhone] = useState(contact.phone);
+      const [open, setOpen] = useState(false);
       return (
         <div className="flex justify-start gap-3">
-          <Dialog>
+          <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
               <Button>Edit</Button>
             </DialogTrigger>
@@ -95,9 +107,43 @@ export const columns: ColumnDef<Contact>[] = [
                   done.
                 </DialogDescription>
               </DialogHeader>
-              <CardEditContact contact={contact} />
+              <form>
+                <div className="grid w-full items-center gap-4">
+                  <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor="name">Name</Label>
+                    <Input
+                      onChange={(e: any) => {
+                        setName(e.target.value);
+                      }}
+                      id="name"
+                      placeholder="John Doe"
+                      value={name}
+                    />
+                  </div>
+                  <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor="phone">Phone Number</Label>
+                    <Input
+                      onChange={(e: any) => {
+                        setPhone(e.target.value);
+                      }}
+                      id="phone"
+                      placeholder="081274218412"
+                      value={phone}
+                    />
+                  </div>
+                </div>
+              </form>
               <DialogFooter>
-                <Button variant="outline">Save</Button>
+                <Button variant="ghost">Cancel</Button>
+                <Button
+                  onClick={() => {
+                    editContact({ ...contact, name, phone });
+                    setOpen(false);
+                    location.reload();
+                  }}
+                >
+                  Save Change
+                </Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
