@@ -17,18 +17,22 @@ const Details = async () => {
         <CardTitle className="text-center">Details Contact</CardTitle>
       </CardHeader>
       <CardContent>
-        <form>
-          <div className="grid w-full items-center gap-4">
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="name">Name</Label>
-              <Input id="name" value={data.name} readOnly />
+        {data.name ? (
+          <form>
+            <div className="grid w-full items-center gap-4">
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="name">Name</Label>
+                <Input id="name" value={data.name} readOnly />
+              </div>
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="phone">Phone Number</Label>
+                <Input id="phone" value={data.phone} readOnly />
+              </div>
             </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="phone">Phone Number</Label>
-              <Input id="phone" value={data.phone} readOnly />
-            </div>
-          </div>
-        </form>
+          </form>
+        ) : (
+          <p className="text-center">No data</p>
+        )}
       </CardContent>
     </Card>
   );

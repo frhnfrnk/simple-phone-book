@@ -3,7 +3,15 @@ import { toast } from "@/components/ui/use-toast";
 import axios from "axios";
 
 export async function getData(): Promise<Contact[]> {
-  const { data } = await axios.get("http://localhost:8080/contacts");
+  let data = [];
+  try {
+    const { data: contacts } = await axios.get(
+      "http://localhost:8080/contacts"
+    );
+    data = contacts;
+  } catch (err) {
+    data = [];
+  }
   return data;
 }
 
@@ -54,6 +62,14 @@ export async function editContact(contact: Contact) {
 }
 
 export async function getContactById(id: string): Promise<Contact> {
-  const { data } = await axios.get(`http://localhost:8080/contacts/${id}`);
+  let data = {} as Contact;
+  try {
+    const { data: contacts } = await axios.get(
+      "http://localhost:8080/contacts/" + id
+    );
+    data = contacts;
+  } catch (err) {
+    data = {} as Contact;
+  }
   return data;
 }
